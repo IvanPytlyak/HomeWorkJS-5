@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <form>
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name">
+
+        <label for="surname">Surname</label>
+        <input type="text" name="surname" id="surname">
+
+        <label for="salary">Salary</label>
+        <input type="number" name="salary" id="salary">
+
+        <label for="date">Date</label>
+        <input type="date" name="date" id="date">
+
+        <button id="submit">Submit</button>
+    </form>
+
+    <div class="wrapper">
+        <table class="in_wrapper_table">
+            <tr>
+                <th></th>
+                <th>Имя</th>
+                <th>Фамилия</th>
+                <th>Зарплата</th>
+                <th>Дата найма</th>
+            </tr>
+        </table>
+        <div class="all">
+            <button id="delete_all">Уволить всех</button>
+            <button id="delete">Уволить</button>
+            <button id="edit">Редактировать</button>
+        </div>
+    </div>
+    <div class="change"></div>
+
+    <script src="./myjs.js"></script>
+</body>
+
+</html>
