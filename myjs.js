@@ -2,6 +2,7 @@ const data = [];
 const inWrapperTable = document.querySelector(".in_wrapper_table");
 const change = document.querySelector(".change");
 const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+
 function render() {
   inWrapperTable.innerHTML = `
             <tr>
@@ -61,13 +62,15 @@ document.querySelector("#delete_all").addEventListener("click", (event) => {
 
 function changeRender(event) {
   event.preventDefault();
-  if (checkboxes) {
-    const inner = checkbox.closest(".inner"); //
-    const index = Array.from(
-      document.querySelector(".in_wrapper_table").children
-    ).indexOf(inner);
+  if (checkboxes.length > 0) {
+    checkboxes.forEach((checkbox) => {
+      const inner = checkbox.closest(".inner"); //
+      const index = Array.from(
+        document.querySelector(".in_wrapper_table").children
+      ).indexOf(inner);
 
-    change.innerHTML = ` 
+      const change = document.querySelector(".change"); //
+      change.innerHTML = ` 
        <div class="change_wrapper" >
         <h2>Редактирование</h2>
         <input type="text" name="change_name" id="change_name" value="${data[index].name}">
@@ -75,23 +78,28 @@ function changeRender(event) {
         <input type="number" name="change_salary" id="change_salary" value="${data[index].salary}">
         <input type="date" name="change_date" id="change_date" value="${data[index].date}">
     
-        <button class="saveButton">Save</button>\n
+        <button class="saveButton">Save</button>
        </div>
      `;
-    change.style.display = "block";
+      change.style.display = "block";
 
-    change.querySelector(".saveButton").addEventListener("click", (event) => {
-      const changetName = document.querySelector("#change_name");
-      const changetSurname = document.querySelector("#change_surname");
-      const changetSalary = document.querySelector("#change_salary");
-      const changetDate = document.querySelector("#change_date");
+      change.querySelector(".saveButton").addEventListener("click", (event) => {
+        const changetName = document.querySelector("#change_name");
+        const changetSurname = document.querySelector("#change_surname");
+        const changetSalary = document.querySelector("#change_salary");
+        const changetDate = document.querySelector("#change_date");
 
-      data[index].name = changetName.value;
-      data[index].surname = changetSurname.value;
-      data[index].salary = changetSalary.value;
-      data[index].date = changetDate.value;
-      render();
-      change.style.display = "none";
+        data[index].name = changetName.value;
+        data[index].surname = changetSurname.value;
+        data[index].salary = changetSalary.value;
+        data[index].date = changetDate.value;
+        render();
+        change.style.display = "none";
+      });
     });
   }
 }
+
+document.querySelector("#edit").addEventListener("click", (event) => {
+  changeRender(event);
+});
