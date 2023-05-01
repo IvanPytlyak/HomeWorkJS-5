@@ -3,15 +3,15 @@ const inWrapperTable = document.querySelector(".in_wrapper_table");
 const change = document.querySelector(".change");
 const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
 
-function render() {
+function render(data) {
   inWrapperTable.innerHTML = `
             <tr>
             <th>id</th>
             <th></th>
             <th>Имя</th>
             <th>Фамилия</th>
-            <th>Зарплата</th>
-            <th>Дата найма</th>
+            <th><label>Зарплата <input type="button" id="salary-up" value ="↑"><input type="button" id="salary-down" value="↓"></label></th>
+            <th><label>Дата найма  <input type="button" id="date-up" value ="↑"><input type="button" id="date-down" value="↓"></label></th>
             </tr>`;
   data.forEach((item) => {
     //data-index ="${index}"
@@ -38,7 +38,7 @@ function addItem(event) {
     date: document.querySelector("#date").value,
   };
   data.push(list);
-  render();
+  render(data);
 }
 
 document.querySelector("#submit").addEventListener("click", (event) => {
@@ -54,15 +54,15 @@ document.querySelector("#delete").addEventListener("click", (event) => {
     const inner = checkbox.closest(".inner");
     // const index = Array.from(
     //   document.querySelector(".in_wrapper_table").children
-    // ).indexOf(inner);
-    const index = data.findIndex((item) => item.index === inner.index);
+    // ).indexOf(inner);                                                    // -1 но работает почему?
+    const index = data.findIndex((item) => item.index === inner.index); // -1 но работает почему?
     data.splice(index - 1, 1);
   });
-  render();
+  render(data);
 });
 document.querySelector("#delete_all").addEventListener("click", (event) => {
   data.length = 0;
-  render();
+  render(data);
 });
 
 function changeRender(event) {
@@ -76,13 +76,13 @@ function changeRender(event) {
       const inner = checkbox.closest(".inner"); //
       // const index = Array.from(
       //   document.querySelector(".in_wrapper_table").children
-      // ).indexOf(inner);
-      // const index = inner.dataset.index;
+      // ).indexOf(inner);                                                   // -1
+      // const index = data.findIndex((item) => item.index == inner.index);  // -1
       const index = data.findIndex(
         (item) => item.index === parseInt(inner.firstElementChild.textContent)
       );
 
-      console.log(index);
+      // console.log(index);
 
       const change = document.querySelector(".change"); //
       change.innerHTML = ` 
@@ -108,13 +108,50 @@ function changeRender(event) {
         data[index].surname = changetSurname.value;
         data[index].salary = changetSalary.value;
         data[index].date = changetDate.value;
-        render();
+        render(data);
         change.style.display = "none";
       });
     });
+  }
+  if (checkboxes.length > 1) {
+    alert(
+      "Выбрано больше одного пользователя, исправлен будет лишь последний выбранный"
+    );
   }
 }
 
 document.querySelector("#edit").addEventListener("click", (event) => {
   changeRender(event);
+});
+
+function sortSalaryAsc(data) {
+  data.sort((a, b) => a.salary - b.salary);
+  console.log(data);
+  render(data);
+}
+function sortSalaryDesc(data) {
+  data.sort((a, b) => b.salary - a.salary);
+  render(data);
+}
+
+function sortDateAsc(data) {
+  data.sort((a, b) => a.date - b.date);
+  render(data);
+}
+function sortDateDesc(data) {
+  data.sort((a, b) => b.date - a.date);
+  render(data);
+}
+
+document.querySelector("#salary-up").addEventListener("click", () => {
+  sortSalaryAsc(data);
+});
+document.querySelector("#salary-down").addEventListener("click", () => {
+  sortSalaryDesc(data);
+});
+document.querySelector("#date-up").addEventListener("click", () => {
+  sortDateAsc(data);
+});
+document.querySelector("#date-down").addEventListener("click", () => {
+  sortDateDesc(data);
 });
