@@ -6,6 +6,7 @@ const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
 function render() {
   inWrapperTable.innerHTML = `
             <tr>
+            <th>id</th>
             <th></th>
             <th>Имя</th>
             <th>Фамилия</th>
@@ -13,8 +14,10 @@ function render() {
             <th>Дата найма</th>
             </tr>`;
   data.forEach((item) => {
+    //data-index ="${index}"
     inWrapperTable.innerHTML += `
-            <tr class="inner">
+            <tr class="inner" >
+            <th>${item.index}</th>
             <td><input type="checkbox" name="check" id="check">
             <td>${item.name}</td>
             <td>${item.surname}</td>
@@ -28,6 +31,7 @@ function render() {
 function addItem(event) {
   event.preventDefault();
   const list = {
+    index: data.length,
     name: document.querySelector("#name").value,
     surname: document.querySelector("#surname").value,
     salary: document.querySelector("#salary").value,
@@ -48,9 +52,10 @@ document.querySelector("#delete").addEventListener("click", (event) => {
   ); //
   checkboxes.forEach((checkbox) => {
     const inner = checkbox.closest(".inner");
-    const index = Array.from(
-      document.querySelector(".in_wrapper_table").children
-    ).indexOf(inner);
+    // const index = Array.from(
+    //   document.querySelector(".in_wrapper_table").children
+    // ).indexOf(inner);
+    const index = data.findIndex((item) => item.index === inner.index);
     data.splice(index - 1, 1);
   });
   render();
@@ -62,12 +67,22 @@ document.querySelector("#delete_all").addEventListener("click", (event) => {
 
 function changeRender(event) {
   event.preventDefault();
+  const checkboxes = document.querySelectorAll(
+    'input[type="checkbox"]:checked'
+  );
+
   if (checkboxes.length > 0) {
     checkboxes.forEach((checkbox) => {
       const inner = checkbox.closest(".inner"); //
-      const index = Array.from(
-        document.querySelector(".in_wrapper_table").children
-      ).indexOf(inner);
+      // const index = Array.from(
+      //   document.querySelector(".in_wrapper_table").children
+      // ).indexOf(inner);
+      // const index = inner.dataset.index;
+      const index = data.findIndex(
+        (item) => item.index === parseInt(inner.firstElementChild.textContent)
+      );
+
+      console.log(index);
 
       const change = document.querySelector(".change"); //
       change.innerHTML = ` 
