@@ -16,7 +16,7 @@ function render(data) {
   data.forEach((item) => {
     //data-index ="${index}"
     inWrapperTable.innerHTML += `
-            <tr class="inner" >
+            <tr class="inner"  id="${item.index}">
             <th>${item.index}</th>
             <td><input type="checkbox" name="check" id="check">
             <td>${item.name}</td>
@@ -38,6 +38,7 @@ function addItem(event) {
     date: document.querySelector("#date").value,
   };
   data.push(list);
+  // тут формировать localstorage?
   render(data);
 }
 
@@ -55,7 +56,7 @@ document.querySelector("#delete").addEventListener("click", (event) => {
     // const index = Array.from(
     //   document.querySelector(".in_wrapper_table").children
     // ).indexOf(inner);                                                    // -1 но работает почему?
-    const index = data.findIndex((item) => item.index === inner.index); // -1 но работает почему?
+    const index = data.findIndex((item) => item.index === inner.id); //  const index = data.findIndex((item) => item.index === inner.index); тоже работает , -1 но работает почему?
     data.splice(index - 1, 1);
   });
   render(data);
@@ -74,13 +75,14 @@ function changeRender(event) {
   if (checkboxes.length > 0) {
     checkboxes.forEach((checkbox) => {
       const inner = checkbox.closest(".inner"); //
+      // console.log(inner.id);
       // const index = Array.from(
       //   document.querySelector(".in_wrapper_table").children
       // ).indexOf(inner);                                                   // -1
-      // const index = data.findIndex((item) => item.index == inner.index);  // -1
-      const index = data.findIndex(
-        (item) => item.index === parseInt(inner.firstElementChild.textContent)
-      );
+      const index = data.findIndex((item) => item.index == inner.id); // -1 предлжено Ростиславом
+      // const index = data.findIndex(                                                  // рабочая версия
+      //   (item) => item.index === parseInt(inner.firstElementChild.textContent)
+      // );
 
       // console.log(index);
 
@@ -124,34 +126,46 @@ document.querySelector("#edit").addEventListener("click", (event) => {
   changeRender(event);
 });
 
-function sortSalaryAsc(data) {
+function sortSalaryAsc() {
   data.sort((a, b) => a.salary - b.salary);
-  console.log(data);
   render(data);
 }
-function sortSalaryDesc(data) {
+function sortSalaryDesc() {
   data.sort((a, b) => b.salary - a.salary);
   render(data);
 }
 
-function sortDateAsc(data) {
-  data.sort((a, b) => a.date - b.date);
+function sortDateAsc() {
+  data.sort((a, b) => new Date(a.date) - new Date(b.date));
   render(data);
 }
-function sortDateDesc(data) {
-  data.sort((a, b) => b.date - a.date);
+function sortDateDesc() {
+  data.sort((a, b) => new Date(b.date) - new Date(a.date));
   render(data);
 }
 
 document.querySelector("#salary-up").addEventListener("click", () => {
-  sortSalaryAsc(data);
+  if (document.querySelector("#salary-up")) {
+    sortSalaryAsc();
+  }
 });
 document.querySelector("#salary-down").addEventListener("click", () => {
-  sortSalaryDesc(data);
+  if (document.querySelector("#salary-down")) {
+    sortSalaryDesc();
+  }
 });
 document.querySelector("#date-up").addEventListener("click", () => {
-  sortDateAsc(data);
+  if (document.querySelector("#date-up")) {
+    sortDateAsc();
+  }
 });
 document.querySelector("#date-down").addEventListener("click", () => {
-  sortDateDesc(data);
+  if (document.querySelector("#date-down")) {
+    sortDateDesc();
+  }
 });
+
+// document.querySelector("#salary-up").addEventListener("click", sortSalaryAsc);
+// document.querySelector("#salary-down").addEventListener("click", sortDateDesc);
+// document.querySelector("#date-up").addEventListener("click", sortDateAsc);
+// document.querySelector("#date-down").addEventListener("click", sortDateDesc);
