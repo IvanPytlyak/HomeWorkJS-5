@@ -27,14 +27,20 @@
     </form>
 
     <div class="wrapper">
-        <table class="in_wrapper_table">
-            <tr>
-                <th></th>
-                <th>Имя</th>
-                <th>Фамилия</th>
-                <th>Зарплата</th>
-                <th>Дата найма</th>
-            </tr>
+        <table >
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th></th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th><label>Зарплата <input type="button" id="salary-up" value ="↑"><input type="button" id="salary-down" value="↓"></label></th>
+                    <th><label>Дата найма  <input type="button" id="date-up" value ="↑"><input type="button" id="date-down" value="↓"></label></th>
+                    </tr>
+            </thead>
+            <tbody class="in_wrapper_table">
+
+            </tbody>
         </table>
         <div class="all">
             <button id="delete_all">Уволить всех</button>

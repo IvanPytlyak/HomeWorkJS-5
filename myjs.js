@@ -1,20 +1,16 @@
-const data = [];
+let data = JSON.parse(localStorage.getItem("data")) || [];
 const inWrapperTable = document.querySelector(".in_wrapper_table");
 const change = document.querySelector(".change");
 const checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
+render(data);
+
+function saveData() {
+  localStorage.setItem("data", JSON.stringify(data));
+}
 
 function render(data) {
-  inWrapperTable.innerHTML = `
-            <tr>
-            <th>id</th>
-            <th></th>
-            <th>Имя</th>
-            <th>Фамилия</th>
-            <th><label>Зарплата <input type="button" id="salary-up" value ="↑"><input type="button" id="salary-down" value="↓"></label></th>
-            <th><label>Дата найма  <input type="button" id="date-up" value ="↑"><input type="button" id="date-down" value="↓"></label></th>
-            </tr>`;
+  inWrapperTable.innerHTML = ``;
   data.forEach((item) => {
-    //data-index ="${index}"
     inWrapperTable.innerHTML += `
             <tr class="inner"  id="${item.index}">
             <th>${item.index}</th>
@@ -27,7 +23,6 @@ function render(data) {
           `;
   });
 }
-
 function addItem(event) {
   event.preventDefault();
   const list = {
@@ -37,8 +32,10 @@ function addItem(event) {
     salary: document.querySelector("#salary").value,
     date: document.querySelector("#date").value,
   };
+
   data.push(list);
-  // тут формировать localstorage?
+  saveData();
+
   render(data);
 }
 
@@ -48,15 +45,11 @@ document.querySelector("#submit").addEventListener("click", (event) => {
 
 document.querySelector("#delete").addEventListener("click", (event) => {
   const checkboxes = document.querySelectorAll(
-    //
-    'input[type="checkbox"]:checked' //
-  ); //
+    'input[type="checkbox"]:checked'
+  );
   checkboxes.forEach((checkbox) => {
     const inner = checkbox.closest(".inner");
-    // const index = Array.from(
-    //   document.querySelector(".in_wrapper_table").children
-    // ).indexOf(inner);                                                    // -1 но работает почему?
-    const index = data.findIndex((item) => item.index === inner.id); //  const index = data.findIndex((item) => item.index === inner.index); тоже работает , -1 но работает почему?
+    const index = data.findIndex((item) => item.index === inner.id);
     data.splice(index - 1, 1);
   });
   render(data);
@@ -78,14 +71,11 @@ function changeRender(event) {
       // console.log(inner.id);
       // const index = Array.from(
       //   document.querySelector(".in_wrapper_table").children
-      // ).indexOf(inner);                                                   // -1
-      const index = data.findIndex((item) => item.index == inner.id); // -1 предлжено Ростиславом
+      // ).indexOf(inner);
+      const index = data.findIndex((item) => item.index == inner.id); //  предлжено Ростиславом
       // const index = data.findIndex(                                                  // рабочая версия
       //   (item) => item.index === parseInt(inner.firstElementChild.textContent)
       // );
-
-      // console.log(index);
-
       const change = document.querySelector(".change"); //
       change.innerHTML = ` 
        <div class="change_wrapper" >
@@ -127,11 +117,12 @@ document.querySelector("#edit").addEventListener("click", (event) => {
 });
 
 function sortSalaryAsc() {
-  data.sort((a, b) => a.salary - b.salary);
+  data.sort((a, b) => +a.salary - +b.salary);
+  console.log(data);
   render(data);
 }
 function sortSalaryDesc() {
-  data.sort((a, b) => b.salary - a.salary);
+  data.sort((a, b) => +b.salary - +a.salary);
   render(data);
 }
 
@@ -147,21 +138,25 @@ function sortDateDesc() {
 document.querySelector("#salary-up").addEventListener("click", () => {
   if (document.querySelector("#salary-up")) {
     sortSalaryAsc();
+    saveData();
   }
 });
 document.querySelector("#salary-down").addEventListener("click", () => {
   if (document.querySelector("#salary-down")) {
     sortSalaryDesc();
+    saveData();
   }
 });
 document.querySelector("#date-up").addEventListener("click", () => {
   if (document.querySelector("#date-up")) {
     sortDateAsc();
+    saveData();
   }
 });
 document.querySelector("#date-down").addEventListener("click", () => {
   if (document.querySelector("#date-down")) {
     sortDateDesc();
+    saveData();
   }
 });
 
